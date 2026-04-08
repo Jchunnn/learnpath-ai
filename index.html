@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>LearnPath AI — AML · Web3 · 日本語</title>
+<style>
+/* ── Reset & Variables ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --nav-w: 230px;
+  --bottom-h: 62px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --c-bg: #ffffff;
+  --c-surface: #f5f5f3;
+  --c-surface2: #eeecea;
+  --c-border: rgba(0,0,0,0.10);
+  --c-border2: rgba(0,0,0,0.07);
+  --c-text: #1a1a18;
+  --c-muted: #6b6b68;
+  --c-hint: #9b9b97;
+  --blue: #378ADD; --blue-light: #E6F1FB; --blue-dark: #0C447C; --blue-mid: #185FA5;
+  --teal: #1D9E75; --teal-light: #E1F5EE; --teal-dark: #085041;
+  --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #412402;
+  --purple: #534AB7; --purple-light: #EEEDFE; --purple-dark: #26215C;
+  --coral: #993C1D; --coral-light: #FAECE7; --coral-dark: #4A1B0C;
+  --red: #A32D2D; --red-bg: #FCEBEB;
+  --green: #3B6D11; --green-light: #EAF3DE;
+  --shadow-sm: 0 1px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.09);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+}
+
+/* ── Scroll hint ── */
+.scroll-hint {
+  text-align: center; padding: 12px 0 4px;
+  font-size: 12px; color: var(--c-muted);
+  animation: bounce-down 1.8s ease-in-out infinite;
+}
+@keyframes bounce-down {
+  0%,100% { transform: translateY(0); opacity:0.6; }
+  50% { transform: translateY(5px); opacity:1; }
+}
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'PingFang TC', 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: var(--c-text);
+  background: #ebebea;
+  line-height: 1.5;
+}
+button, input { font-family: inherit; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 2px; }
+
+/* ── Layout Shell ──────────────────────────────────────────────── */
+.shell {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ── Desktop Sidebar ───────────────────────────────────────────── */
+.sidebar {
+  width: var(--nav-w);
+  min-width: var(--nav-w);
+  background: var(--c-bg);
+  border-right: 0.5px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 10;
+}
+.sidebar-logo {
+  padding: 20px 18px 16px;
+  border-bottom: 0.5px solid var(--c-border);
+}
+.sidebar-logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.logo-icon {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: white; font-weight: 700;
+  flex-shrink: 0;
+}
+.sidebar-logo-text { font-size: 15px; font-weight: 700; color: var(--c-text); letter-spacing: -0.02em; }
+.sidebar-logo-sub { font-size: 11px; color: var(--c-muted); padding-left: 36px; }
+.sidebar-section {
+  font-size: 10px; color: var(--c-hint);
+  padding: 14px 18px 5px;
+  text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  font-size: 13px; color: var(--c-muted);
+  border-left: 2.5px solid transparent;
+  user-select: none;
+  position: relative;
+}
+.nav-item:hover { background: var(--c-surface); color: var(--c-text); }
+.nav-item.active {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  font-weight: 600;
+  border-left-color: var(--blue);
+}
+.nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.nav-label { flex: 1; }
+.nav-badge {
+  background: var(--blue); color: white;
+  font-size: 10px; padding: 1px 6px;
+  border-radius: 10px; font-weight: 700;
+  line-height: 1.4;
+}
+.nav-badge.red { background: #E24B4A; }
+.sidebar-footer {
+  margin-top: auto;
+  padding: 14px 18px;
+  border-top: 0.5px solid var(--c-border);
+}
+.sidebar-footer-row {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--c-muted); margin-bottom: 7px;
+}
+.sidebar-footer-row span:last-child { font-weight: 700; color: var(--c-text); }
+.mini-progress { height: 4px; background: var(--c-surface); border-radius: 2px; overflow: hidden; }
+.mini-progress-fill { height: 100%; background: var(--teal); border-radius: 2px; }
+
+/* ── Main Content Area ─────────────────────────────────────────── */
+.main-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--c-surface);
+}
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Mobile Top Bar ────────────────────────────────────────────── */
+.mobile-topbar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 52px;
+  background: var(--c-bg);
+  border-bottom: 0.5px solid var(--c-border);
+  flex-shrink: 0;
+  position: sticky; top: 0; z-index: 20;
+}
+.mobile-logo { font-size: 15px; font-weight: 700; color: var(--c-text); letter-spacing: -0.02em; display: flex; align-items: center; gap: 7px; }
+.mobile-topbar-right { display: flex; align-items: center; gap: 8px; }
+.streak-pill {
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 9px;
+  background: var(--amber-light);
+  border-radius: 20px;
+  font-size: 12px; font-weight: 700; color: var(--amber-dark);
+}
+
+/* ── Mobile Bottom Nav ─────────────────────────────────────────── */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--bottom-h);
+  background: var(--c-bg);
+  border-top: 0.5px solid var(--c-border);
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bottom-nav-inner {
+  display: flex;
+  height: 100%;
+}
+.bottom-item {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  transition: background 0.1s;
+  position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-item.active .bottom-icon { color: var(--blue); }
+.bottom-item.active .bottom-label { color: var(--blue); font-weight: 700; }
+.bottom-icon { font-size: 20px; color: var(--c-hint); transition: color 0.12s; line-height: 1; }
+.bottom-label { font-size: 10px; color: var(--c-muted); transition: color 0.12s; letter-spacing: 0.01em; }
+.bottom-badge {
+  position: absolute;
+  top: 6px; right: calc(50% - 18px);
+  background: #E24B4A; color: white;
+  font-size: 9px; font-weight: 700;
+  padding: 0 4px; min-width: 15px; height: 15px;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.bottom-badge.blue { background: var(--blue); }
+
+/* ── Pages ─────────────────────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; animation: fadein 0.18s ease; }
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-header { margin-bottom: 18px; }
+.page-title { font-size: 20px; font-weight: 700; color: var(--c-text); letter-spacing: -0.03em; }
+.page-sub { font-size: 12px; color: var(--c-muted); margin-top: 3px; }
+.title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* ── Cards ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--c-bg);
+  border: 0.5px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 13px; font-weight: 700;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 7px;
+  color: var(--c-text);
+}
+.card-title-right { margin-left: auto; font-size: 11px; font-weight: 400; color: var(--c-muted); }
+
+/* ── Stats Grid ─────────────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stat-card {
+  background: var(--c-bg);
+  border: 0.5px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 13px;
+}
+.stat-label { font-size: 10px; color: var(--c-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-val { font-size: 21px; font-weight: 700; margin-top: 4px; letter-spacing: -0.03em; }
+.stat-sub { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
+.c-blue { color: var(--blue); } .c-teal { color: var(--teal); } .c-amber { color: var(--amber); } .c-purple { color: var(--purple); }
+
+/* ── Grid ───────────────────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ── Progress Bars ──────────────────────────────────────────────── */
+.progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.progress-row:last-child { margin-bottom: 0; }
+.progress-label { font-size: 12px; color: var(--c-muted); flex-shrink: 0; }
+.progress-bar { flex: 1; height: 5px; background: var(--c-surface); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; }
+.progress-pct { width: 34px; font-size: 12px; font-weight: 700; text-align: right; }
+.fill-blue { background: var(--blue); }
+.fill-teal { background: var(--teal); }
+.fill-amber { background: var(--amber); }
+.fill-purple { background: var(--purple); }
+.fill-red { background: #E24B4A; }
+
+/* ── Tags & Badges ──────────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  padding: 2px 8px; border-radius: 10px;
+  font-size: 10px; font-weight: 700;
+  vertical-align: middle; margin-right: 4px;
+  line-height: 1.5;
+}
+.tag-aml { background: var(--blue-light); color: var(--blue-dark); }
+.tag-web3 { background: var(--purple-light); color: var(--purple-dark); }
+.tag-jp { background: var(--amber-light); color: var(--amber-dark); }
+.ai-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 8px; border-radius: 10px;
+  background: var(--purple-light); color: var(--purple-dark);
+  font-size: 10px; font-weight: 700;
+}
+
+/* ── Task Items ─────────────────────────────────────────────────── */
+.task-list { }
+.task-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--c-border2);
+}
+.task-item:last-child { border-bottom: none; padding-bottom: 0; }
+.task-check {
+  width: 18px; height: 18px; min-width: 18px;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+  transition: all 0.14s;
+  flex-shrink: 0;
+}
+.task-check.done { background: var(--teal); border-color: var(--teal); }
+.task-check.done::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; }
+.task-body { flex: 1; min-width: 0; }
+.task-name { font-size: 13px; font-weight: 500; line-height: 1.5; }
+.task-name.done-text { text-decoration: line-through; color: var(--c-muted); font-weight: 400; }
+.task-meta { font-size: 11px; color: var(--c-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.task-time { font-size: 11px; color: var(--c-hint); flex-shrink: 0; margin-top: 2px; margin-left: 6px; }
+
+/* ── Countdown ──────────────────────────────────────────────────── */
+.countdown-box {
+  background: var(--amber-light);
+  border: 0.5px solid rgba(186,117,23,0.18);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.countdown-left .label { font-size: 13px; font-weight: 700; color: var(--amber-dark); }
+.countdown-left .sub { font-size: 11px; color: var(--amber-dark); opacity: 0.7; margin-top: 2px; }
+.countdown-num { font-size: 30px; font-weight: 800; color: var(--amber); letter-spacing: -0.04em; line-height: 1; }
+.countdown-unit { font-size: 10px; font-weight: 700; color: var(--amber-dark); text-align: right; margin-top: 2px; }
+
+/* ── Week Calendar ──────────────────────────────────────────────── */
+.week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 10px; }
+.week-day { text-align: center; }
+.week-lbl { font-size: 9px; color: var(--c-hint); margin-bottom: 4px; font-weight: 700; text-transform: uppercase; }
+.week-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; margin: 0 auto;
+}
+.dot-done { background: var(--teal); color: white; }
+.dot-today { background: var(--blue); color: white; }
+.dot-future { background: var(--c-surface); color: var(--c-hint); opacity: 0.5; }
+
+/* ── Subject Cards ──────────────────────────────────────────────── */
+.subject-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.subj-card { border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+.subj-card.aml { background: var(--blue-light); }
+.subj-card.web3 { background: var(--purple-light); }
+.subj-card.jp { background: var(--amber-light); }
+.subj-title { font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; }
+.aml .subj-title { color: var(--blue-dark); }
+.web3 .subj-title { color: var(--purple-dark); }
+.jp .subj-title { color: var(--amber-dark); }
+.subj-score { font-size: 26px; font-weight: 800; letter-spacing: -0.04em; }
+.aml .subj-score { color: var(--blue); }
+.web3 .subj-score { color: var(--purple); }
+.jp .subj-score { color: var(--amber); }
+.subj-note { font-size: 11px; margin-top: 2px; }
+.aml .subj-note { color: var(--blue-mid); }
+.web3 .subj-note { color: #3C3489; }
+.jp .subj-note { color: #633806; }
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--c-border);
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: inherit;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover { background: var(--c-surface); }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--blue); border-color: var(--blue); color: white; }
+.btn-primary:hover { opacity: 0.88; background: var(--blue); }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* ── Filter Pills ───────────────────────────────────────────────── */
+.filter-row { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-scroll { display: none; gap: 7px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.filter-btn {
+  padding: 5px 13px; border-radius: 20px;
+  border: 0.5px solid var(--c-border);
+  font-size: 12px; cursor: pointer;
+  background: var(--c-bg); color: var(--c-muted);
+  transition: all 0.12s; font-family: inherit;
+  white-space: nowrap;
+}
+.filter-btn.active { background: var(--blue); border-color: var(--blue); color: white; font-weight: 700; }
+
+/* ── Quiz ───────────────────────────────────────────────────────── */
+.quiz-meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.quiz-progress-track { height: 3px; background: var(--c-surface); border-radius: 2px; overflow: hidden; margin-bottom: 18px; }
+.quiz-progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
+.question-card {
+  background: var(--c-bg);
+  border: 0.5px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.q-meta { font-size: 11px; color: var(--c-muted); font-weight: 700; margin-bottom: 9px; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 14px; font-weight: 500; line-height: 1.75; margin-bottom: 15px; }
+.options { display: flex; flex-direction: column; gap: 8px; }
+.option {
+  padding: 10px 14px;
+  border: 0.5px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 13px;
+  transition: all 0.12s;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--c-text);
+  -webkit-tap-highlight-color: transparent;
+}
+.option:hover { border-color: var(--blue); background: var(--blue-light); }
+.option:active { transform: scale(0.99); }
+.option.correct { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); }
+.option.wrong { border-color: #E24B4A; background: var(--red-bg); color: #501313; }
+.opt-letter {
+  width: 23px; height: 23px; min-width: 23px;
+  border-radius: 50%; background: var(--c-surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; transition: all 0.12s;
+}
+.option.correct .opt-letter { background: var(--teal); color: white; }
+.option.wrong .opt-letter { background: #E24B4A; color: white; }
+.answer-box {
+  margin-top: 12px; padding: 11px 14px;
+  background: var(--teal-light);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--teal);
+  font-size: 12px; color: var(--teal-dark);
+  line-height: 1.75; display: none;
+}
+
+/* ── Error Items ────────────────────────────────────────────────── */
+.error-item {
+  background: var(--c-bg);
+  border: 0.5px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  padding: 14px; margin-bottom: 10px;
+}
+.error-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
+.error-q { font-size: 13px; font-weight: 600; margin-bottom: 7px; line-height: 1.6; }
+.error-wrong { font-size: 12px; color: var(--red); margin-bottom: 3px; }
+.error-right { font-size: 12px; color: var(--teal-dark); font-weight: 600; margin-bottom: 7px; }
+.error-explain {
+  font-size: 12px; color: var(--c-muted); line-height: 1.75;
+  padding-top: 8px;
+  border-top: 0.5px solid var(--c-border);
+}
+
+/* ── Info Boxes ─────────────────────────────────────────────────── */
+.info-box {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.info-box.blue { background: var(--blue-light); border-left: 3px solid var(--blue); }
+.info-box.coral { background: var(--coral-light); border-left: 3px solid #D85A30; }
+.info-box .ib-title { font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+.info-box.blue .ib-title { color: var(--blue-dark); }
+.info-box.coral .ib-title { color: var(--coral-dark); }
+.info-box .ib-text { font-size: 12px; line-height: 1.75; }
+.info-box.blue .ib-text { color: var(--blue-dark); opacity: 0.85; }
+.info-box.coral .ib-text { color: var(--coral-dark); opacity: 0.85; }
+
+/* ── Spaced Rep Dots ────────────────────────────────────────────── */
+.rep-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--c-border2); }
+.rep-item:last-child { border-bottom: none; }
+.rep-dot { width: 8px; height: 8px; min-width: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.rep-title { font-size: 12px; font-weight: 600; }
+.rep-sub { font-size: 11px; color: var(--c-muted); margin-top: 1px; }
+
+/* ── Mobile Section Divider ─────────────────────────────────────── */
+.section-divider {
+  font-size: 11px; font-weight: 700; color: var(--c-muted);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin: 18px 0 10px;
+}
+
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-scroll .filter-btn { flex-shrink: 0; }
+
+/* ── Responsive Breakpoints ──────────────────────────────────────── */
+
+/* Tablet: hide sidebar label on small desktop */
+@media (max-width: 900px) {
+  :root { --nav-w: 60px; }
+  .sidebar-logo-text, .sidebar-logo-sub,
+  .nav-label, .sidebar-section,
+  .sidebar-footer-row, .mini-progress { display: none; }
+  .nav-item { padding: 12px; justify-content: center; border-left: none; border-bottom: 2px solid transparent; }
+  .nav-item.active { border-left: none; border-bottom-color: var(--blue); }
+  .nav-badge { position: absolute; top: 6px; right: 6px; font-size: 9px; padding: 0 4px; }
+  .sidebar-logo { padding: 14px; display: flex; justify-content: center; }
+  .logo-icon { margin: 0; }
+  .sidebar-footer { display: flex; justify-content: center; padding: 12px; }
+}
+
+/* Mobile: switch to bottom nav */
+@media (max-width: 600px) {
+  body { background: var(--c-surface); }
+  .shell { flex-direction: column; }
+  .sidebar { display: none; }
+  .mobile-topbar { display: flex; }
+  .bottom-nav { display: block; }
+  .main-content {
+    padding: 14px 14px calc(var(--bottom-h) + 14px + env(safe-area-inset-bottom, 0px));
+  }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .grid-2 { grid-template-columns: 1fr; }
+  .subject-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+  .subj-card { padding: 10px 8px; }
+  .subj-score { font-size: 22px; }
+  .progress-label { width: 70px !important; }
+  .page-title { font-size: 17px; }
+  .card { padding: 13px; }
+  .filter-row { display: none; }
+  .filter-scroll { display: flex; }
+  .question-card { padding: 14px; }
+  .q-text { font-size: 13px; }
+  .option { font-size: 12px; padding: 9px 12px; }
+  .countdown-num { font-size: 26px; }
+  .week-dot { width: 24px; height: 24px; font-size: 9px; }
+  .task-meta { white-space: normal; }
+  .btn-sm { padding: 5px 11px; font-size: 11px; }
+  .error-header { flex-direction: column; }
+  .error-header .btn-sm { align-self: flex-start; }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .stats-grid { gap: 7px; }
+  .stat-val { font-size: 19px; }
+  .subject-grid { gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ═══════════ DESKTOP SIDEBAR ═══════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <div class="logo-icon">L</div>
+        <span class="sidebar-logo-text">LearnPath AI</span>
+      </div>
+      <div class="sidebar-logo-sub">AML · Web3 · 日本語</div>
+    </div>
+
+    <div class="sidebar-section">學習模組</div>
+    <div class="nav-item active" data-page="dashboard">
+      <span class="nav-icon">◈</span>
+      <span class="nav-label">總覽 Dashboard</span>
+    </div>
+    <div class="nav-item" data-page="tasks">
+      <span class="nav-icon">☐</span>
+      <span class="nav-label">今日任務</span>
+      <span class="nav-badge blue">5</span>
+    </div>
+    <div class="nav-item" data-page="quiz">
+      <span class="nav-icon">◎</span>
+      <span class="nav-label">題庫練習</span>
+    </div>
+    <div class="nav-item" data-page="news">
+      <span class="nav-icon">📰</span>
+      <span class="nav-label">每日時事</span>
+    </div>
+    <div class="nav-item" data-page="errors">
+      <span class="nav-icon">△</span>
+      <span class="nav-label">錯題本</span>
+      <span class="nav-badge red">0</span>
+    </div>
+    <div class="nav-item" data-page="progress">
+      <span class="nav-icon">↗</span>
+      <span class="nav-label">學習進度</span>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-row">
+        <span>整體進度</span><span>Day 1/90</span>
+      </div>
+      <div class="mini-progress"><div class="mini-progress-fill" style="width:1%"></div></div>
+    </div>
+  </aside>
+
+  <!-- ═══════════ MAIN WRAP ═══════════ -->
+  <div class="main-wrap">
+
+    <!-- Mobile Top Bar -->
+    <header class="mobile-topbar">
+      <div class="mobile-logo">
+        <div class="logo-icon" style="width:24px;height:24px;font-size:12px;border-radius:6px;">L</div>
+        LearnPath AI
+      </div>
+      <div class="mobile-topbar-right">
+        <div class="streak-pill">🔥 1天</div>
+        <div class="ai-badge">✦ AI</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="main-content">
+
+      <!-- ════════ DASHBOARD ════════ -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div class="title-row">
+            <div class="page-title">早安！第 1 天 🔥</div>
+            <div class="ai-badge">✦ AI 自動排程</div>
+          </div>
+          <div class="page-sub">距離日檢 N4 還有 88 天，繼續加油！</div>
+        </div>
+
+        <div class="countdown-box">
+          <div class="countdown-left">
+            <div class="label">🗓 日檢 N4 倒數</div>
+            <div class="sub">2026年7月5日（日）</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="countdown-num">88</div>
+            <div class="countdown-unit">DAYS TO GO</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">今日完成</div>
+            <div class="stat-val c-blue">0/5</div>
+            <div class="stat-sub">還沒開始</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">整體正確率</div>
+            <div class="stat-val c-teal">—</div>
+            <div class="stat-sub">尚無紀錄</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">待複習錯題</div>
+            <div class="stat-val c-amber">0</div>
+            <div class="stat-sub">尚無錯題</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">學習連勝</div>
+            <div class="stat-val c-purple">1天</div>
+            <div class="stat-sub">今天開始！</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">📊 各科正確率</div>
+            <div class="progress-row">
+              <span class="progress-label" style="width:46px;">AML</span>
+              <div class="progress-bar"><div class="progress-fill fill-blue" style="width:0%"></div></div>
+              <span class="progress-pct c-blue">—</span>
+            </div>
+            <div class="progress-row">
+              <span class="progress-label" style="width:46px;">Web3</span>
+              <div class="progress-bar"><div class="progress-fill fill-purple" style="width:0%"></div></div>
+              <span class="progress-pct c-purple">—</span>
+            </div>
+            <div class="progress-row">
+              <span class="progress-label" style="width:46px;">日文</span>
+              <div class="progress-bar"><div class="progress-fill fill-amber" style="width:0%"></div></div>
+              <span class="progress-pct c-amber">—</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">📅 本週出勤</div>
+            <div class="week-grid">
+              <div class="week-day"><div class="week-lbl">一</div><div class="week-dot dot-future">7</div></div>
+              <div class="week-day"><div class="week-lbl">二</div><div class="week-dot dot-future">8</div></div>
+              <div class="week-day"><div class="week-lbl">三</div><div class="week-dot dot-today">今</div></div>
+              <div class="week-day"><div class="week-lbl">四</div><div class="week-dot dot-future">10</div></div>
+              <div class="week-day"><div class="week-lbl">五</div><div class="week-dot dot-future">11</div></div>
+              <div class="week-day"><div class="week-lbl">六</div><div class="week-dot dot-future">12</div></div>
+              <div class="week-day"><div class="week-lbl">日</div><div class="week-dot dot-future">13</div></div>
+            </div>
+            <div style="font-size:12px;color:var(--c-muted);">本週 1/7 天 · 今天是第一天！💪</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">⚡ 今日推薦任務 <span class="card-title-right">點擊打勾完成</span></div>
+          <div class="task-list">
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name"><span class="tag tag-aml">AML</span>KYC 基礎 + 客戶盡職調查（CDD）</div>
+                <div class="task-meta">閱讀 15 分 · 入門概念</div>
+              </div>
+              <div class="task-time">25m</div>
+            </div>
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name"><span class="tag tag-web3">Web3</span>區塊鏈基礎與交易結構</div>
+                <div class="task-meta">概念學習 + 基本術語</div>
+              </div>
+              <div class="task-time">30m</div>
+            </div>
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name"><span class="tag tag-jp">日文</span>50 音入門：あ行〜か行</div>
+                <div class="task-meta">假名學習 + 發音練習</div>
+              </div>
+              <div class="task-time">20m</div>
+            </div>
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name"><span class="tag tag-aml">AML</span>今日 AI 自動生成 50 題</div>
+                <div class="task-meta">AML 20 · Web3 15 · 日文 15</div>
+              </div>
+              <div class="task-time">45m</div>
+            </div>
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name"><span class="tag tag-jp">日文</span>間隔複習：今日單字複習</div>
+                <div class="task-meta">第一天入門詞彙 10 個</div>
+              </div>
+              <div class="task-time">15m</div>
+            </div>
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name">🪔 <span style="color:#7a4f00;font-weight:600;">念經修心</span>：藥師佛心咒 + 金剛經</div>
+                <div class="task-meta">清淨心靈 · 轉職好運加持 🙏</div>
+              </div>
+              <div class="task-time">20m</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════ TODAY'S TASKS ════════ -->
+      <div class="page" id="page-tasks">
+        <div class="page-header">
+          <div class="page-title">今日學習任務</div>
+          <div class="page-sub">2026年4月8日（三）· AI 自動排程 · 共約 155 分鐘</div>
+        </div>
+
+        <div class="info-box blue">
+          <div class="ib-title">✦ AI 今日主題（Day 1）</div>
+          <div class="ib-text">AML：可疑交易報告（STR）申報標準 + Web3 鏈上異常交易模式識別<br>日文：N4 文法 〜ながら、〜てから + 時間詞彙 30 個</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-aml">AML 模組</span><span class="card-title-right">55 分鐘 · 中級</span></div>
+          <div class="task-list">
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">📖 閱讀：STR 申報條件與流程</div><div class="task-meta">含 FATF 標準 + 台灣法規對照</div></div><div class="task-time">15m</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">🎯 案例：洗錢三階段實例解析</div><div class="task-meta">Placement → Layering → Integration</div></div><div class="task-time">20m</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">✍ 練習：AI 生成 AML 題目 20 題</div><div class="task-meta">含 STR/CDD/EDD/KYC 情境題</div></div><div class="task-time">20m</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-web3">Web3 模組</span><span class="card-title-right">45 分鐘 · 初中級</span></div>
+          <div class="task-list">
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">📖 DeFi 協議洗錢風險分析</div><div class="task-meta">Mixer / Cross-chain Bridge / DEX 手法</div></div><div class="task-time">20m</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">🔍 工具：Chainalysis / Elliptic 介紹</div><div class="task-meta">鏈上追蹤 · 地址聚類技術</div></div><div class="task-time">10m</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">✍ Web3 AML 情境題 15 題</div><div class="task-meta">VASP 法規 + FATF Travel Rule</div></div><div class="task-time">15m</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-jp">日文 N4 模組</span><span class="card-title-right">35 分鐘</span></div>
+          <div class="task-list">
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">📚 文法：〜ながら / 〜てから 比較</div><div class="task-meta">例句 10 個 + 易混淆點分析</div></div><div class="task-time">10m</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">🔤 單字：時間順序詞彙 30 個</div><div class="task-meta">まず / それから / もうすぐ 等</div></div><div class="task-time">10m</div></div>
+            <div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body"><div class="task-name">✍ N4 填空 + 選擇 15 題</div><div class="task-meta">假名 / 文法 / 單字綜合</div></div><div class="task-time">15m</div></div>
+          </div>
+        </div>
+
+        <div class="card" style="border-color:rgba(186,117,23,0.3);background:linear-gradient(135deg,#fffdf7 0%,#fef9ee 100%);">
+          <div class="card-title" style="color:#7a4f00;">
+            <span style="font-size:18px;">🪔</span> 念經修心模組
+            <span class="card-title-right" style="color:#ba7517;">20 分鐘 · 每日功課</span>
+          </div>
+          <div style="font-size:12px;color:#9a6a20;margin-bottom:12px;line-height:1.7;padding:8px 12px;background:rgba(186,117,23,0.07);border-radius:6px;">
+            ✨ 每日念經，清淨心靈，學習更有能量。轉職路上，佛菩薩保佑順利！🙏
+          </div>
+          <div class="task-list">
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name" style="color:#5c3d00;">📿 藥師佛心咒 × 108 遍</div>
+                <div class="task-meta">嗡 · 貝卡則 · 貝卡則 · 瑪哈貝卡則 · 貝卡則 · 惹雜薩目 · 噶喋 · 梭哈</div>
+              </div>
+              <div class="task-time">7m</div>
+            </div>
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name" style="color:#5c3d00;">📖 金剛經 · 第一品至第五品</div>
+                <div class="task-meta">法會因由分 · 善現啟請分 · 大乘正宗分 · 妙行無住分 · 如理實見分</div>
+              </div>
+              <div class="task-time">8m</div>
+            </div>
+            <div class="task-item">
+              <div class="task-check" onclick="toggleCheck(this)"></div>
+              <div class="task-body">
+                <div class="task-name" style="color:#5c3d00;">📜 藥師琉璃光如來本願功德經 · 節錄</div>
+                <div class="task-meta">誦讀消業障 · 增加轉職好運 🌟</div>
+              </div>
+              <div class="task-time">5m</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════ QUIZ ════════ -->
+      <div class="page" id="page-quiz">
+        <div class="page-header">
+          <div>
+            <div class="page-title">題庫練習</div>
+            <div class="page-sub">AI 每日生成 50 題 · 含新題 + 錯題複習</div>
+          </div>
+        </div>
+
+        <!-- AI Generate Bar -->
+        <div id="quiz-generate-bar" style="background:var(--blue-light);border:0.5px solid #b5c8f4;border-left:3px solid var(--blue);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--blue-dark);">🤖 AI 每日出題系統</div>
+            <div style="font-size:11px;color:var(--blue-dark);opacity:0.8;margin-top:2px;">點擊按鈕，Claude AI 立即生成今日全新題目</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="generateAllQuiz()" id="gen-btn">✦ 生成今日 50 題</button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="quiz-loading" style="display:none;text-align:center;padding:40px 20px;">
+          <div id="loading-spinner" style="font-size:28px;margin-bottom:12px;">🤖</div>
+          <div style="font-size:14px;font-weight:600;color:var(--c-text);margin-bottom:6px;" id="loading-text">Claude AI 正在生成題目...</div>
+          <div style="font-size:12px;color:var(--c-muted);" id="loading-sub">AML 20題 · Web3 15題 · 日文 15題 · 共 50 題</div>
+          <div style="margin-top:16px;height:4px;background:var(--c-surface);border-radius:2px;overflow:hidden;max-width:240px;margin-left:auto;margin-right:auto;">
+            <div id="gen-progress-bar" style="height:100%;background:var(--blue);border-radius:2px;width:0%;transition:width 0.5s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="quiz-error" style="display:none;background:var(--red-bg);border-left:3px solid #E24B4A;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;">
+          <div style="font-size:12px;font-weight:700;color:#501313;margin-bottom:4px;">⚠ 生成失敗</div>
+          <div style="font-size:12px;color:#701818;" id="error-msg"></div>
+          <button class="btn btn-sm" style="margin-top:8px;" onclick="generateAllQuiz()">重試</button>
+        </div>
+
+        <!-- Desktop filter -->
+        <div class="filter-row" id="quiz-filter-row" style="display:none;">
+          <button class="filter-btn active" onclick="setFilter(this,'quiz','all')">全部 (<span class="q-total">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter(this,'quiz','aml')">AML (<span class="q-aml">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter(this,'quiz','web3')">Web3 (<span class="q-web3">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter(this,'quiz','jp')">日文 (<span class="q-jp">0</span>)</button>
+        </div>
+        <div class="filter-scroll" id="quiz-filter-scroll" style="display:none;">
+          <button class="filter-btn active" onclick="setFilter(this,'quiz','all')">全部 (<span class="q-total">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter(this,'quiz','aml')">AML (<span class="q-aml">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter(this,'quiz','web3')">Web3 (<span class="q-web3">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter(this,'quiz','jp')">日文 (<span class="q-jp">0</span>)</button>
+        </div>
+
+        <div class="quiz-meta-row" id="quiz-meta" style="display:none;">
+          <span style="font-size:13px;color:var(--c-muted);" id="quiz-counter">第 0 題</span>
+          <span style="font-size:12px;color:var(--c-muted);font-weight:700;" id="quiz-accuracy">今日正確率 —</span>
+        </div>
+        <div class="quiz-progress-track" id="quiz-progress-track" style="display:none;">
+          <div class="quiz-progress-fill" id="qpb" style="width:0%"></div>
+        </div>
+
+        <!-- Dynamic questions container -->
+        <div id="quiz-questions-container"></div>
+
+      </div>
+
+      <!-- ════════ ERROR LOG ════════ -->
+      <div class="page" id="page-errors">
+        <div class="page-header">
+          <div class="page-title">錯題本</div>
+          <div class="page-sub">共 0 題待複習 · 完成第一次答題後自動記錄</div>
+        </div>
+
+        <div class="filter-row">
+          <button class="filter-btn active" onclick="setFilter(this,'error','all')">全部 (0)</button>
+          <button class="filter-btn" onclick="setFilter(this,'error','aml')">AML (0)</button>
+          <button class="filter-btn" onclick="setFilter(this,'error','web3')">Web3 (0)</button>
+          <button class="filter-btn" onclick="setFilter(this,'error','jp')">日文 (0)</button>
+        </div>
+        <div class="filter-scroll">
+          <button class="filter-btn active" onclick="setFilter(this,'error','all')">全部 (0)</button>
+          <button class="filter-btn" onclick="setFilter(this,'error','aml')">AML (0)</button>
+          <button class="filter-btn" onclick="setFilter(this,'error','web3')">Web3 (0)</button>
+          <button class="filter-btn" onclick="setFilter(this,'error','jp')">日文 (0)</button>
+        </div>
+
+        <div id="error-empty" style="text-align:center;padding:48px 20px;">
+          <div style="font-size:36px;margin-bottom:12px;">🎉</div>
+          <div style="font-size:15px;font-weight:600;color:var(--c-text);margin-bottom:6px;">目前尚無錯題</div>
+          <div style="font-size:13px;color:var(--c-muted);line-height:1.7;">完成題庫練習後，答錯的題目<br>會自動記錄在這裡</div>
+        </div>
+      </div>
+
+      <!-- ════════ PROGRESS ════════ -->
+      <div class="page" id="page-progress">
+        <div class="page-header">
+          <div class="page-title">學習進度分析</div>
+          <div class="page-sub">第 1 天 · Spaced Repetition 系統運行中</div>
+        </div>
+
+        <div class="subject-grid">
+          <div class="subj-card aml">
+            <div class="subj-title">AML</div>
+            <div class="subj-score">—</div>
+            <div class="subj-note">尚無紀錄</div>
+          </div>
+          <div class="subj-card web3">
+            <div class="subj-title">Web3</div>
+            <div class="subj-score">—</div>
+            <div class="subj-note">尚無紀錄</div>
+          </div>
+          <div class="subj-card jp">
+            <div class="subj-title">日文 N4</div>
+            <div class="subj-score">—</div>
+            <div class="subj-note">尚無紀錄</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🎯 弱點雷達分析</div>
+          <div class="progress-row"><span class="progress-label" style="width:140px;flex-shrink:0;">Web3 · VASP 法規</span><div class="progress-bar"><div class="progress-fill fill-purple" style="width:0%"></div></div><span class="progress-pct c-purple">—</span></div>
+          <div class="progress-row"><span class="progress-label" style="width:140px;flex-shrink:0;">AML · EDD/CDD 差異</span><div class="progress-bar"><div class="progress-fill fill-blue" style="width:0%"></div></div><span class="progress-pct c-blue">—</span></div>
+          <div class="progress-row"><span class="progress-label" style="width:140px;flex-shrink:0;">日文 · て形文法</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:0%"></div></div><span class="progress-pct c-amber">—</span></div>
+          <div class="progress-row"><span class="progress-label" style="width:140px;flex-shrink:0;">Web3 · DeFi 風險</span><div class="progress-bar"><div class="progress-fill fill-purple" style="width:0%"></div></div><span class="progress-pct c-purple">—</span></div>
+          <div class="progress-row"><span class="progress-label" style="width:140px;flex-shrink:0;">AML · STR 申報</span><div class="progress-bar"><div class="progress-fill fill-blue" style="width:0%"></div></div><span class="progress-pct c-blue">—</span></div>
+          <div class="progress-row"><span class="progress-label" style="width:140px;flex-shrink:0;">日文 · 單字</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:0%"></div></div><span class="progress-pct c-amber">—</span></div>
+          <div class="info-box coral" style="margin-top:12px;margin-bottom:0;">
+            <div class="ib-title">✦ AI 系統提示</div>
+            <div class="ib-text">這是你的第 1 天！先完成今日任務，弱點分析將在你答完題目後自動生成。加油！</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📊 累計學習成果</div>
+          <div class="stats-grid" style="margin-bottom:0;">
+            <div class="stat-card"><div class="stat-label">答題總數</div><div class="stat-val c-blue">0</div><div class="stat-sub">今天開始</div></div>
+            <div class="stat-card"><div class="stat-label">學習時間</div><div class="stat-val c-teal">0h</div><div class="stat-sub">累計時間</div></div>
+            <div class="stat-card"><div class="stat-label">複習次數</div><div class="stat-val c-amber">0</div><div class="stat-sub">錯題回顧</div></div>
+            <div class="stat-card"><div class="stat-label">掌握概念</div><div class="stat-val c-purple">0</div><div class="stat-sub">個知識點</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📅 間隔複習排程（Spaced Repetition）</div>
+          <div class="rep-item">
+            <div class="rep-dot" style="background:#E24B4A;"></div>
+            <div><div class="rep-title">今日必複習：VASP 法規 (3題) · EDD 定義 (2題)</div><div class="rep-sub">距上次錯誤 1-3 天 · 優先安排</div></div>
+          </div>
+          <div class="rep-item">
+            <div class="rep-dot" style="background:var(--amber);"></div>
+            <div><div class="rep-title">明天複習：STR 情境題 (4題) · 日文て形 (3題)</div><div class="rep-sub">距上次錯誤 4-7 天</div></div>
+          </div>
+          <div class="rep-item">
+            <div class="rep-dot" style="background:var(--teal);"></div>
+            <div><div class="rep-title">下週複習：KYC 基礎 (5題) · Mixer 概念 (2題)</div><div class="rep-sub">距上次錯誤 7-14 天</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════ NEWS 每日時事 ════════ -->
+      <div class="page" id="page-news">
+        <div class="page-header">
+          <div class="title-row">
+            <div class="page-title">每日時事</div>
+            <div class="ai-badge">✦ AI 整理</div>
+          </div>
+          <div class="page-sub">Web3 · AML · 加密貨幣最新動態</div>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-row">
+          <button class="filter-btn active" onclick="filterNews(this,'all')">全部</button>
+          <button class="filter-btn" onclick="filterNews(this,'web3')">Web3</button>
+          <button class="filter-btn" onclick="filterNews(this,'aml')">AML 法規</button>
+          <button class="filter-btn" onclick="filterNews(this,'crypto')">加密貨幣</button>
+        </div>
+        <div class="filter-scroll">
+          <button class="filter-btn active" onclick="filterNews(this,'all')">全部</button>
+          <button class="filter-btn" onclick="filterNews(this,'web3')">Web3</button>
+          <button class="filter-btn" onclick="filterNews(this,'aml')">AML 法規</button>
+          <button class="filter-btn" onclick="filterNews(this,'crypto')">加密貨幣</button>
+        </div>
+
+        <!-- Generate bar -->
+        <div id="news-generate-bar" style="background:var(--blue-light);border:0.5px solid #b5c8f4;border-left:3px solid var(--blue);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--blue-dark);">📰 AI 每日時事摘要</div>
+            <div style="font-size:11px;color:var(--blue-dark);opacity:0.8;margin-top:2px;">整理鏈捕手、Decrypt、CoinDesk 等最新報導</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="generateNews()">✦ 抓取今日時事</button>
+        </div>
+
+        <!-- Loading -->
+        <div id="news-loading" style="display:none;text-align:center;padding:40px 20px;">
+          <div style="font-size:28px;margin-bottom:12px;">📡</div>
+          <div style="font-size:14px;font-weight:600;color:var(--c-text);margin-bottom:6px;">AI 正在整理最新時事...</div>
+          <div style="font-size:12px;color:var(--c-muted);">搜尋 Web3 · AML · 加密貨幣動態</div>
+          <div style="margin-top:16px;height:4px;background:var(--c-surface);border-radius:2px;overflow:hidden;max-width:200px;margin-left:auto;margin-right:auto;">
+            <div id="news-progress-bar" style="height:100%;background:var(--blue);border-radius:2px;width:0%;transition:width 0.8s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div id="news-error" style="display:none;background:var(--red-bg);border-left:3px solid #E24B4A;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;">
+          <div style="font-size:12px;font-weight:700;color:#501313;margin-bottom:4px;">⚠ 載入失敗</div>
+          <div style="font-size:12px;color:#701818;" id="news-error-msg"></div>
+          <button class="btn btn-sm" style="margin-top:8px;" onclick="generateNews()">重試</button>
+        </div>
+
+        <!-- News container -->
+        <div id="news-container"></div>
+
+        <!-- News sources info -->
+        <div style="margin-top:16px;padding:12px 14px;background:var(--c-surface);border-radius:var(--radius-sm);border:0.5px solid var(--c-border);">
+          <div style="font-size:11px;font-weight:700;color:var(--c-muted);margin-bottom:6px;">📌 參考來源</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:11px;padding:2px 8px;background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:10px;color:var(--c-muted);">鏈捕手 ChainCatcher</span>
+            <span style="font-size:11px;padding:2px 8px;background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:10px;color:var(--c-muted);">Decrypt</span>
+            <span style="font-size:11px;padding:2px 8px;background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:10px;color:var(--c-muted);">CoinDesk</span>
+            <span style="font-size:11px;padding:2px 8px;background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:10px;color:var(--c-muted);">The Block</span>
+            <span style="font-size:11px;padding:2px 8px;background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:10px;color:var(--c-muted);">FATF 官網</span>
+            <span style="font-size:11px;padding:2px 8px;background:var(--c-bg);border:0.5px solid var(--c-border);border-radius:10px;color:var(--c-muted);">金管會</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /main-wrap -->
+
+  <!-- ═══════════ MOBILE BOTTOM NAV ═══════════ -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <div class="bottom-item active" data-page="dashboard">
+        <div class="bottom-icon">◈</div>
+        <div class="bottom-label">總覽</div>
+      </div>
+      <div class="bottom-item" data-page="tasks">
+        <div class="bottom-badge blue">5</div>
+        <div class="bottom-icon">☐</div>
+        <div class="bottom-label">任務</div>
+      </div>
+      <div class="bottom-item" data-page="quiz">
+        <div class="bottom-icon">◎</div>
+        <div class="bottom-label">題庫</div>
+      </div>
+      <div class="bottom-item" data-page="news">
+        <div class="bottom-icon">📰</div>
+        <div class="bottom-label">時事</div>
+      </div>
+      <div class="bottom-item" data-page="progress">
+        <div class="bottom-icon">↗</div>
+        <div class="bottom-label">進度</div>
+      </div>
+    </div>
+  </nav>
+
+</div><!-- /shell -->
+
+<script>
+// ── Navigation ──────────────────────────────────────────
+function navigate(pageId) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  var target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.sidebar .nav-item').forEach(function(item) {
+    item.classList.toggle('active', item.dataset.page === pageId);
+  });
+  document.querySelectorAll('.bottom-item').forEach(function(item) {
+    item.classList.toggle('active', item.dataset.page === pageId);
+  });
+  var mc = document.querySelector('.main-content');
+  if (mc) mc.scrollTop = 0;
+}
+document.querySelectorAll('[data-page]').forEach(function(el) {
+  el.addEventListener('click', function() { navigate(this.dataset.page); });
+});
+
+// ── Task Check ──────────────────────────────────────────
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  var nameEl = el.nextElementSibling && el.nextElementSibling.querySelector('.task-name');
+  if (nameEl) nameEl.classList.toggle('done-text');
+}
+
+// ── Filters ─────────────────────────────────────────────
+function setFilter(el, context, subject) {
+  var page = el.closest('.page');
+  if (page) {
+    page.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    page.querySelectorAll('.filter-btn').forEach(function(b) {
+      if (b.getAttribute('onclick') === el.getAttribute('onclick')) b.classList.add('active');
+    });
+  }
+  el.classList.add('active');
+  if (context === 'quiz') {
+    var cards = document.querySelectorAll('#quiz-questions-container .question-card');
+    var vis = 0;
+    cards.forEach(function(card) {
+      var show = subject === 'all' || card.dataset.subject === subject;
+      card.style.display = show ? 'block' : 'none';
+      if (show) vis++;
+    });
+    var counter = document.getElementById('quiz-counter');
+    if (counter) counter.textContent = '顯示 ' + vis + ' 題';
+  }
+}
+
+// ── Quiz State ───────────────────────────────────────────
+var qAnswered = 0;
+var qCorrect = 0;
+var allQuestions = [];
+
+// ── Build question card HTML ─────────────────────────────
+function buildQuestionCard(q, index) {
+  var subjectTag = q.subject === 'aml'
+    ? '<span class="tag tag-aml">AML</span>'
+    : q.subject === 'web3'
+    ? '<span class="tag tag-web3">Web3</span>'
+    : '<span class="tag tag-jp">日文 N4</span>';
+
+  var typeLabel = q.type === 'scenario' ? '情境題 Scenario' : '選擇題 MCQ';
+  if (q.subject === 'jp') typeLabel = q.type === 'fill' ? '填空題' : '選擇題';
+
+  var qTextHtml = '<div class="q-text">' + escHtml(q.question_zh);
+  if (q.question_en && q.question_en.trim()) {
+    qTextHtml += '<br><span style="font-size:12px;color:var(--c-muted);line-height:2;">' + escHtml(q.question_en) + '</span>';
+  }
+  qTextHtml += '</div>';
+
+  var optsHtml = '<div class="options" id="opts' + index + '">';
+  q.options.forEach(function(opt) {
+    var enPart = (opt.en && opt.en.trim())
+      ? ' <span style="color:var(--c-muted);font-size:11px;">/ ' + escHtml(opt.en) + '</span>'
+      : '';
+    optsHtml += '<div class="option" onclick="selectOpt(this,\'' + opt.letter + '\',\'' + q.correct + '\',' + index + ')">'
+      + '<div class="opt-letter">' + opt.letter + '</div>'
+      + '<span>' + escHtml(opt.zh) + enPart + '</span></div>';
+  });
+  optsHtml += '</div>';
+
+  var expHtml = '<div class="answer-box" id="exp' + index + '">'
+    + '✓ <strong>正確答案：' + q.correct + ' — ' + escHtml(q.options.find(function(o){ return o.letter === q.correct; })?.zh || '') + '</strong><br>'
+    + escHtml(q.explanation_zh);
+  if (q.key_terms) {
+    expHtml += '<span style="display:block;margin-top:6px;padding-top:6px;border-top:1px solid rgba(0,0,0,0.08);font-size:11px;"><strong>Key terms：</strong>' + escHtml(q.key_terms) + '</span>';
+  }
+  expHtml += '</div>';
+
+  return '<div class="question-card" data-subject="' + q.subject + '">'
+    + '<div class="q-meta">' + subjectTag + ' ' + typeLabel + ' · 第 ' + index + ' 題</div>'
+    + qTextHtml + optsHtml + expHtml + '</div>';
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── AI Quiz Generation ───────────────────────────────────
+async function fetchQuizBySubject(subject, day, count) {
+  const res = await fetch('/api/generate-quiz', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ subject, day, count: count || 5 })
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'API 錯誤');
+  }
+  return res.json();
+}
+
+function setGenProgress(pct, text, sub) {
+  document.getElementById('gen-progress-bar').style.width = pct + '%';
+  if (text) document.getElementById('loading-text').textContent = text;
+  if (sub) document.getElementById('loading-sub').textContent = sub;
+}
+
+async function generateAllQuiz() {
+  var day = 1;
+  document.getElementById('quiz-generate-bar').style.display = 'none';
+  document.getElementById('quiz-loading').style.display = 'block';
+  document.getElementById('quiz-error').style.display = 'none';
+  document.getElementById('quiz-filter-row').style.display = 'none';
+  document.getElementById('quiz-filter-scroll').style.display = 'none';
+  document.getElementById('quiz-meta').style.display = 'none';
+  document.getElementById('quiz-progress-track').style.display = 'none';
+  document.getElementById('quiz-questions-container').innerHTML = '';
+  qAnswered = 0; qCorrect = 0; allQuestions = [];
+
+  // 分 10 批，每批 5 題：AML×4批(20題)、Web3×3批(15題)、日文×3批(15題) = 共 50 題
+  var batches = [
+    { subject: 'aml',  label: 'AML 題目（第 1 批）',  pct: 3  },
+    { subject: 'aml',  label: 'AML 題目（第 2 批）',  pct: 13 },
+    { subject: 'aml',  label: 'AML 題目（第 3 批）',  pct: 23 },
+    { subject: 'aml',  label: 'AML 題目（第 4 批）',  pct: 33 },
+    { subject: 'web3', label: 'Web3 題目（第 1 批）', pct: 44 },
+    { subject: 'web3', label: 'Web3 題目（第 2 批）', pct: 55 },
+    { subject: 'web3', label: 'Web3 題目（第 3 批）', pct: 66 },
+    { subject: 'jp',   label: '日文題目（第 1 批）',  pct: 75 },
+    { subject: 'jp',   label: '日文題目（第 2 批）',  pct: 85 },
+    { subject: 'jp',   label: '日文題目（第 3 批）',  pct: 93 }
+  ];
+
+  try {
+    for (var i = 0; i < batches.length; i++) {
+      var b = batches[i];
+      setGenProgress(b.pct, '🤖 正在生成 ' + b.label + '...', '每批 5 題，共 10 批 · AML 20題 + Web3 15題 + 日文 15題');
+      var data = await fetchQuizBySubject(b.subject, day, 5);
+      allQuestions = allQuestions.concat(data.questions || []);
+    }
+
+    setGenProgress(100, '✅ 生成完成！', '共 ' + allQuestions.length + ' 題');
+    setTimeout(function() {
+      renderQuestions(allQuestions);
+      document.getElementById('quiz-loading').style.display = 'none';
+    }, 400);
+
+  } catch(err) {
+    document.getElementById('quiz-loading').style.display = 'none';
+    document.getElementById('quiz-generate-bar').style.display = 'flex';
+    document.getElementById('quiz-error').style.display = 'block';
+    document.getElementById('error-msg').textContent = err.message + '。請檢查 API Key 是否正確設定。';
+  }
+}
+
+function renderQuestions(questions) {
+  var container = document.getElementById('quiz-questions-container');
+  var html = '';
+  questions.forEach(function(q, i) { html += buildQuestionCard(q, i + 1); });
+  html += '<div class="scroll-hint">↓ 向下滑動查看更多題目</div>';
+  container.innerHTML = html;
+
+  var total = questions.length;
+  var amlCount = questions.filter(function(q){ return q.subject === 'aml'; }).length;
+  var web3Count = questions.filter(function(q){ return q.subject === 'web3'; }).length;
+  var jpCount = questions.filter(function(q){ return q.subject === 'jp'; }).length;
+
+  document.querySelectorAll('.q-total').forEach(function(el){ el.textContent = total; });
+  document.querySelectorAll('.q-aml').forEach(function(el){ el.textContent = amlCount; });
+  document.querySelectorAll('.q-web3').forEach(function(el){ el.textContent = web3Count; });
+  document.querySelectorAll('.q-jp').forEach(function(el){ el.textContent = jpCount; });
+
+  document.getElementById('quiz-filter-row').style.display = '';
+  document.getElementById('quiz-filter-scroll').style.display = '';
+  document.getElementById('quiz-meta').style.display = 'flex';
+  document.getElementById('quiz-progress-track').style.display = 'block';
+  document.getElementById('quiz-counter').textContent = '共 ' + total + ' 題';
+}
+
+// ── News ──────────────────────────────────────────────────
+var currentNewsFilter = 'all';
+
+function filterNews(el, category) {
+  var page = el.closest('.page');
+  if (page) page.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  el.classList.add('active');
+  currentNewsFilter = category;
+  document.querySelectorAll('.news-card').forEach(function(card) {
+    var show = category === 'all' || card.dataset.category === category;
+    card.style.display = show ? 'block' : 'none';
+  });
+}
+
+function importanceColor(imp) {
+  if (imp === 'high') return { bg: '#FCEBEB', border: '#E24B4A', text: '#501313', label: '🔴 重要' };
+  if (imp === 'medium') return { bg: var_amber_light, border: var_amber, text: var_amber_dark, label: '🟡 關注' };
+  return { bg: 'var(--c-surface)', border: 'var(--c-border)', text: 'var(--c-muted)', label: '⚪ 一般' };
+}
+
+function buildNewsCard(item, i) {
+  var catTag = item.category === 'web3'
+    ? '<span class="tag tag-web3">Web3</span>'
+    : item.category === 'aml'
+    ? '<span class="tag tag-aml">AML</span>'
+    : '<span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:var(--teal-light);color:var(--teal-dark);">加密貨幣</span>';
+
+  var impColor = item.importance === 'high'
+    ? { dot: '#E24B4A', label: '重要' }
+    : item.importance === 'medium'
+    ? { dot: '#BA7517', label: '關注' }
+    : { dot: '#9b9b97', label: '一般' };
+
+  var titleHtml = item.url && item.url.startsWith('http')
+    ? '<a href="' + escHtml(item.url) + '" target="_blank" rel="noopener" style="font-size:14px;font-weight:600;color:var(--blue-dark);line-height:1.5;text-decoration:none;display:flex;align-items:flex-start;gap:4px;">'
+      + escHtml(item.title)
+      + '<span style="font-size:10px;flex-shrink:0;margin-top:2px;opacity:0.6;">↗</span></a>'
+    : '<div style="font-size:14px;font-weight:600;color:var(--c-text);line-height:1.5;">' + escHtml(item.title) + '</div>';
+
+  return '<div class="news-card card" data-category="' + (item.category || 'web3') + '" style="margin-bottom:12px;">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">'
+    + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
+    + catTag
+    + '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:' + impColor.dot + ';font-weight:700;">'
+    + '<span style="width:6px;height:6px;border-radius:50%;background:' + impColor.dot + ';display:inline-block;"></span>'
+    + impColor.label + '</span>'
+    + '</div>'
+    + '<span style="font-size:10px;color:var(--c-muted);">' + escHtml(item.source || '') + '</span>'
+    + '</div>'
+    + '<div style="margin-bottom:7px;">' + titleHtml + '</div>'
+    + '<div style="font-size:12px;color:var(--c-muted);line-height:1.7;margin-bottom:8px;">' + escHtml(item.summary) + '</div>'
+    + '<div style="background:var(--teal-light);border-left:3px solid var(--teal);border-radius:var(--radius-xs);padding:7px 10px;font-size:11px;color:var(--teal-dark);margin-bottom:8px;">'
+    + '💡 <strong>學習啟示：</strong>' + escHtml(item.insight) + '</div>'
+    + '<div style="font-size:10px;color:var(--c-muted);">🔑 ' + escHtml(item.keywords) + '</div>'
+    + '</div>';
+}
+
+async function generateNews() {
+  document.getElementById('news-generate-bar').style.display = 'none';
+  document.getElementById('news-loading').style.display = 'block';
+  document.getElementById('news-error').style.display = 'none';
+  document.getElementById('news-container').innerHTML = '';
+
+  var bar = document.getElementById('news-progress-bar');
+  var prog = 0;
+  var timer = setInterval(function() {
+    prog = Math.min(prog + 8, 90);
+    if (bar) bar.style.width = prog + '%';
+  }, 400);
+
+  try {
+    var res = await fetch('/api/generate-news', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    if (!res.ok) {
+      var err = await res.json();
+      throw new Error(err.error || 'API 錯誤');
+    }
+    var data = await res.json();
+    clearInterval(timer);
+    if (bar) bar.style.width = '100%';
+
+    setTimeout(function() {
+      document.getElementById('news-loading').style.display = 'none';
+      var news = data.news || [];
+      if (news.length === 0) throw new Error('沒有取得新聞資料');
+      var html = '';
+      news.forEach(function(item, i) { html += buildNewsCard(item, i); });
+      document.getElementById('news-container').innerHTML = html;
+    }, 300);
+
+  } catch(err) {
+    clearInterval(timer);
+    document.getElementById('news-loading').style.display = 'none';
+    document.getElementById('news-generate-bar').style.display = 'flex';
+    document.getElementById('news-error').style.display = 'block';
+    document.getElementById('news-error-msg').textContent = err.message;
+  }
+}
+function selectOpt(el, chosen, correct, qNum) {
+  var optsContainer = document.getElementById('opts' + qNum);
+  if (!optsContainer) return;
+  optsContainer.querySelectorAll('.option').forEach(function(o) { o.onclick = null; });
+  qAnswered++;
+  if (chosen === correct) {
+    el.classList.add('correct');
+    qCorrect++;
+  } else {
+    el.classList.add('wrong');
+    optsContainer.querySelectorAll('.option').forEach(function(o) {
+      if (o.querySelector('.opt-letter').textContent.trim() === correct) o.classList.add('correct');
+    });
+  }
+  var exp = document.getElementById('exp' + qNum);
+  if (exp) exp.style.display = 'block';
+  var total = allQuestions.length || 8;
+  var pct = Math.round((qAnswered / total) * 100);
+  var bar = document.getElementById('qpb');
+  if (bar) bar.style.width = pct + '%';
+  var accPct = Math.round((qCorrect / qAnswered) * 100);
+  var acc = document.getElementById('quiz-accuracy');
+  if (acc) {
+    acc.textContent = '今日正確率 ' + accPct + '%';
+    acc.style.color = accPct >= 70 ? 'var(--teal)' : 'var(--amber)';
+  }
+  var counter = document.getElementById('quiz-counter');
+  if (counter) counter.textContent = '已答 ' + qAnswered + ' / ' + total + ' 題';
+}
+</script>
+
+</body>
+</html>
