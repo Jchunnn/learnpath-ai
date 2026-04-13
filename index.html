@@ -818,96 +818,10 @@ button, input { font-family: inherit; }
           <div class="ib-text"><span id="tasks-ai-text">AML：可疑交易報告（STR）申報標準 + Web3 鏈上異常交易模式識別<br>日文：N4 文法 〜ながら、〜てから + 時間詞彙 30 個</span></div>
         </div>
 
-        <div class="card">
-          <div class="card-title"><span class="tag tag-aml">AML 模組</span><span class="card-title-right">55 分鐘 · 中級</span></div>
-          <div class="task-list">
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="showContent('str')" style="cursor:pointer;">📖 閱讀：STR 申報條件與流程 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>
-                <div class="task-meta">含 FATF 標準 + 台灣法規對照</div>
-              </div>
-              <div class="task-time">15m</div>
-            </div>
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="showContent('3stage')" style="cursor:pointer;">🎯 案例：洗錢三階段實例解析 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>
-                <div class="task-meta">Placement → Layering → Integration</div>
-              </div>
-              <div class="task-time">20m</div>
-            </div>
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="navigate('quiz')" style="cursor:pointer;">✍ 練習：AI 生成 AML 題目 20 題 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 前往題庫</span></div>
-                <div class="task-meta">含 STR/CDD/EDD/KYC 情境題</div>
-              </div>
-              <div class="task-time">20m</div>
-            </div>
-          </div>
-        </div>
+        <!-- 動態任務內容 -->
+        <div id="tasks-dynamic-content"></div>
 
-        <div class="card">
-          <div class="card-title"><span class="tag tag-web3">Web3 模組</span><span class="card-title-right">45 分鐘 · 初中級</span></div>
-          <div class="task-list">
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="showContent('defi')" style="cursor:pointer;">📖 DeFi 協議洗錢風險分析 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>
-                <div class="task-meta">Mixer / Cross-chain Bridge / DEX 手法</div>
-              </div>
-              <div class="task-time">20m</div>
-            </div>
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="showContent('tools')" style="cursor:pointer;">🔍 工具：Chainalysis / Elliptic 介紹 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>
-                <div class="task-meta">鏈上追蹤 · 地址聚類技術</div>
-              </div>
-              <div class="task-time">10m</div>
-            </div>
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="navigate('quiz')" style="cursor:pointer;">✍ Web3 AML 情境題 15 題 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 前往題庫</span></div>
-                <div class="task-meta">VASP 法規 + FATF Travel Rule</div>
-              </div>
-              <div class="task-time">15m</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><span class="tag tag-jp">日文 N4 模組</span><span class="card-title-right">35 分鐘</span></div>
-          <div class="task-list">
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="showContent('grammar')" style="cursor:pointer;">📚 文法：〜ながら / 〜てから 比較 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊學習</span></div>
-                <div class="task-meta">例句 10 個 + 易混淆點分析</div>
-              </div>
-              <div class="task-time">10m</div>
-            </div>
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="showContent('vocab')" style="cursor:pointer;">🔤 單字：時間順序詞彙 30 個 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊學習</span></div>
-                <div class="task-meta">まず / それから / もうすぐ 等</div>
-              </div>
-              <div class="task-time">10m</div>
-            </div>
-            <div class="task-item">
-              <div class="task-check" onclick="toggleCheck(this)"></div>
-              <div class="task-body">
-                <div class="task-name" onclick="navigate('quiz')" style="cursor:pointer;">✍ N4 填空 + 選擇 15 題 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 前往題庫</span></div>
-                <div class="task-meta">假名 / 文法 / 單字綜合</div>
-              </div>
-              <div class="task-time">15m</div>
-            </div>
-          </div>
-        </div>
-
+        <!-- 念經模組（固定不變） -->
         <div class="card" style="border-color:rgba(186,117,23,0.3);background:linear-gradient(135deg,#fffdf7 0%,#fef9ee 100%);">
           <div class="card-title" style="color:#7a4f00;">
             <span style="font-size:18px;">🪔</span> 念經修心模組
@@ -2730,6 +2644,7 @@ function updateTodayTasksHeader() {
   var wds = ['日','一','二','三','四','五','六'];
   var dateStr = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日（' + wds[now.getDay()] + '）';
 
+  // 更新頂部標題
   var dateSub = document.getElementById('tasks-date-sub');
   if (dateSub) dateSub.textContent = dateStr + ' · Day ' + DAY_NUM + ' · ' + level + ' · 共約 155 分鐘';
 
@@ -2742,6 +2657,76 @@ function updateTodayTasksHeader() {
   // Sidebar day
   var sidebarEl = document.getElementById('sidebar-day');
   if (sidebarEl) sidebarEl.textContent = 'Day ' + DAY_NUM + '/90';
+
+  // 動態生成三個模組卡片
+  var container = document.getElementById('tasks-dynamic-content');
+  if (!container || !plan) return;
+
+  // 每個主題的閱讀 key（對應 showContent）
+  var amlKey = plan.amlKey || 'str';
+  var web3Key = plan.web3Key || 'defi';
+  var jpKey = plan.jpKey || 'grammar';
+
+  // 擷取主題前半段作為標題
+  var amlTitle = plan.aml.split('（')[0].split('(')[0].trim();
+  var web3Title = plan.web3.split('（')[0].split('(')[0].trim();
+  var jpTitle = plan.jp.split('（')[0].split('(')[0].trim();
+
+  container.innerHTML =
+    '<div class="card">' +
+      '<div class="card-title"><span class="tag tag-aml">AML 模組</span><span class="card-title-right">55 分鐘 · ' + level + '</span></div>' +
+      '<div class="task-list">' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="showContent(\'' + amlKey + '\')" style="cursor:pointer;">📖 閱讀：' + amlTitle + ' <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>' +
+          '<div class="task-meta">' + plan.aml + '</div>' +
+        '</div><div class="task-time">15m</div></div>' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="showContent(\'3stage\')" style="cursor:pointer;">🎯 案例：洗錢三階段實例解析 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>' +
+          '<div class="task-meta">Placement → Layering → Integration</div>' +
+        '</div><div class="task-time">20m</div></div>' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="navigate(\'quiz\')" style="cursor:pointer;">✍ 練習：AI 生成 AML 題目 20 題 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 前往題庫</span></div>' +
+          '<div class="task-meta">今日主題情境題</div>' +
+        '</div><div class="task-time">20m</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="card-title"><span class="tag tag-web3">Web3 模組</span><span class="card-title-right">45 分鐘 · ' + level + '</span></div>' +
+      '<div class="task-list">' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="showContent(\'' + web3Key + '\')" style="cursor:pointer;">📖 閱讀：' + web3Title + ' <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>' +
+          '<div class="task-meta">' + plan.web3 + '</div>' +
+        '</div><div class="task-time">20m</div></div>' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="showContent(\'tools\')" style="cursor:pointer;">🔍 工具：Chainalysis / Elliptic 介紹 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊閱讀</span></div>' +
+          '<div class="task-meta">鏈上追蹤 · 地址聚類技術</div>' +
+        '</div><div class="task-time">10m</div></div>' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="navigate(\'quiz\')" style="cursor:pointer;">✍ Web3 AML 情境題 15 題 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 前往題庫</span></div>' +
+          '<div class="task-meta">VASP 法規 + FATF Travel Rule</div>' +
+        '</div><div class="task-time">15m</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="card">' +
+      '<div class="card-title"><span class="tag tag-jp">日文 N4 模組</span><span class="card-title-right">35 分鐘</span></div>' +
+      '<div class="task-list">' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="showContent(\'' + jpKey + '\')" style="cursor:pointer;">📚 學習：' + jpTitle + ' <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊學習</span></div>' +
+          '<div class="task-meta">' + plan.jp + '</div>' +
+        '</div><div class="task-time">10m</div></div>' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="showContent(\'vocab\')" style="cursor:pointer;">🔤 單字：今日詞彙練習 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 點擊學習</span></div>' +
+          '<div class="task-meta">詞彙 + 例句練習</div>' +
+        '</div><div class="task-time">10m</div></div>' +
+        '<div class="task-item"><div class="task-check" onclick="toggleCheck(this)"></div><div class="task-body">' +
+          '<div class="task-name" onclick="navigate(\'quiz\')" style="cursor:pointer;">✍ N4 填空 + 選擇 15 題 <span style="font-size:10px;color:var(--blue);font-weight:600;">▶ 前往題庫</span></div>' +
+          '<div class="task-meta">假名 / 文法 / 單字綜合</div>' +
+        '</div><div class="task-time">15m</div></div>' +
+      '</div>' +
+    '</div>';
+
+  // 恢復勾選狀態
+  restoreTaskChecks();
 }
 
 // ═══════════════════════════════════════════════════════
